@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "../../shared/Button";
 import Container from "../../shared/Container";
+import Input from "../../shared/Input";
 import Header from "../Header";
 import "./App.css";
 
@@ -12,6 +13,7 @@ function App() {
         <Button content="Teste" onClick={() => alert("Bora")}>
           Macarroni
         </Button>
+        <Input label="Street" placeholder="Adress" />
       </Container>
     </div>
   );

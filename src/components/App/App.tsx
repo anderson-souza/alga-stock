@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../../shared/Button";
 import Container from "../../shared/Container";
 import Input from "../../shared/Input";
+import Table from "../../shared/Table";
 import Header from "../Header";
 import "./App.css";
 
@@ -10,10 +11,7 @@ function App() {
     <div className="App">
       <Header title="AlgaStock" />
       <Container>
-        <Button content="Teste" onClick={() => alert("Bora")}>
-          Macarroni
-        </Button>
-        <Input label="Street" placeholder="Adress" />
+        <Table></Table>
       </Container>
     </div>
   );

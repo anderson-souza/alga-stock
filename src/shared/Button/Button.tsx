@@ -3,7 +3,7 @@ import "./Button.css";
 
 declare interface ButtonProps {
   content?: string;
-  onClick: () => void;
+  onClick?: () => void;
   appendIcon?: ReactNode;
 }
 

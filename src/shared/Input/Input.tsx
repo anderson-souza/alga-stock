@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./input.css";
 
 declare interface InputProps
@@ -7,17 +7,11 @@ declare interface InputProps
 }
 
 const Input: React.FC<InputProps> = (props) => {
-  const [street, setStreet] = useState("");
-
   return (
     <div className="AppInput">
       <label>
         <span>{props.label}</span>
-        <input
-          {...props}
-          value={street}
-          onChange={(e) => setStreet(e.target.value)}
-        />
+        <input {...props} />
       </label>
     </div>
   );

@@ -8,8 +8,10 @@ import "./App.css";
 import { ProductCreator } from "../Products/ProductForm";
 import { useState } from "react";
 import { Product } from "../../shared/Table/Table.mockdata";
+import Swal from "sweetalert2";
 
 const headers: TableHeader[] = [
+  { key: "id", value: "#" },
   { key: "name", value: "Product" },
   { key: "price", value: "Price" },
   { key: "stock", value: "Available Stock", right: true },
@@ -41,6 +43,39 @@ function App() {
     setUpdatingProduct(undefined);
   };
 
+  const handleProductDetail = (product: Product) => {
+    Swal.fire(
+      "Detalhes do Produto",
+      `O producto ${product.name}, custa R$${product.price}. E temos ${product.stock} em estoque`,
+      "info"
+    );
+  };
+
+  const deleteProduct = (id: number) => {
+    setProducts(products.filter((product) => product.id !== id));
+  };
+
+  const handleProductDelete = (product: Product) => {
+    Swal.fire({
+      title: "Tem certeza que deseja deletar o produto?",
+      text: "Esta ação é irreversível!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#09f",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, deletar!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProduct(product.id);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
+
+  const handleProductEdit = (product: Product) => {
+    setUpdatingProduct(product);
+  };
+
   return (
     <div className="App">
       <Header title="AlgaStock" />
@@ -49,9 +84,9 @@ function App() {
           headers={headers}
           data={products}
           enableActions
-          onDelete={console.log}
-          onDetail={console.log}
-          onEdit={console.log}
+          onDelete={handleProductDelete}
+          onDetail={handleProductDetail}
+          onEdit={handleProductEdit}
         />
         <ProductsForm
           onSubmit={handleProductSubmit}

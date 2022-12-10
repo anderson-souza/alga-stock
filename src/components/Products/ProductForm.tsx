@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Button from "../../shared/Button";
+import React, { useState, useEffect } from "react";
+
 import Form from "../../shared/Form";
 import Input from "../../shared/Input";
+import Button from "../../shared/Button";
 import { Product } from "../../shared/Table/Table.mockdata";
 
 declare interface InitialFormState {
@@ -23,7 +24,7 @@ declare interface ProductFormProps {
   onUpdate?: (product: Product) => void;
 }
 
-const ProductsForm: React.FC<ProductFormProps> = (props) => {
+const ProductForm: React.FC<ProductFormProps> = (props) => {
   const initialFormState: InitialFormState = props.form
     ? {
         _id: props.form._id,
@@ -75,40 +76,44 @@ const ProductsForm: React.FC<ProductFormProps> = (props) => {
 
   const handleFormSubmit = () => {
     form._id ? updateProduct(form) : createProduct(form);
+
     setForm(initialFormState);
   };
 
   return (
-    <Form onSubmit={handleFormSubmit} title="Product Form">
+    <Form title="Product form" onSubmit={handleFormSubmit}>
       <Input
         onChange={handleInputChange}
         value={form.name}
         name="name"
         label="Name"
-        placeholder="Cookie"
+        placeholder="E.g.: Cookie"
+        required
       />
       <Input
         onChange={handleInputChange}
+        value={form.price}
         name="price"
         label="Price"
-        value={form.price}
-        placeholder="1.25"
         type="number"
         step="0.01"
         min="0"
+        placeholder="E.g.: 1.25"
+        required
       />
       <Input
         onChange={handleInputChange}
+        value={form.stock}
         name="stock"
         label="Stock"
-        value={form.stock}
-        placeholder="Cookie"
         type="number"
         min="0"
+        placeholder="E.g.: 15"
+        required
       />
       <Button>{form._id ? "Update" : "Submit"}</Button>
     </Form>
   );
 };
 
-export default ProductsForm;
+export default ProductForm;

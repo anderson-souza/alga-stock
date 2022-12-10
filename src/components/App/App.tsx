@@ -8,7 +8,14 @@ import { ProductCreator } from "../Products/ProductForm";
 import { useEffect, useState } from "react";
 import { Product } from "../../shared/Table/Table.mockdata";
 import Swal from "sweetalert2";
-import { getAllProducts } from "../../services/Product.services";
+import {
+  updateSingleProduct,
+  deleteSingleProduct,
+} from "../../services/Product.services";
+import {
+  getAllProducts,
+  createSingleProduct,
+} from "../../services/Product.services";
 
 const headers: TableHeader[] = [
   { key: "id", value: "#" },
@@ -23,32 +30,30 @@ function App() {
     products[0]
   );
 
+  async function fetchData() {
+    const productsData = await getAllProducts();
+
+    setProducts(productsData);
+  }
+
   useEffect(() => {
-    async function fetchData() {
-      const productsData = await getAllProducts();
-
-      setProducts(productsData);
-    }
-
     fetchData();
   }, []);
 
-  const handleProductSubmit = (product: ProductCreator) => {
-    setProducts([
-      ...products,
-      {
-        _id: String(products.length + 1),
-        ...product,
-      },
-    ]);
+  const handleProductSubmit = async (product: ProductCreator) => {
+    try {
+      await createSingleProduct(product).then(fetchData);
+    } catch (e) {
+      Swal.fire("oopa", String(e), "error");
+    }
   };
 
-  const handleProductUpdate = (newProduct: Product) => {
-    setProducts(
-      products.map((product) =>
-        product._id === newProduct._id ? newProduct : product
-      )
-    );
+  const handleProductUpdate = async (newProduct: Product) => {
+    try {
+      await updateSingleProduct(newProduct).then(fetchData);
+    } catch (error) {
+      Swal.fire("oopa", String(error), "error");
+    }
 
     setUpdatingProduct(undefined);
   };
@@ -61,8 +66,12 @@ function App() {
     );
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts(products.filter((product) => product._id !== id));
+  const deleteProduct = async (id: string) => {
+    try {
+      await deleteSingleProduct(id).then(fetchData);
+    } catch (error) {
+      Swal.fire("oopa", String(error), "error");
+    }
   };
 
   const handleProductDelete = (product: Product) => {

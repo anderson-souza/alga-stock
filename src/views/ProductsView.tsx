@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Container from "../shared/Container";
 import ProductsCRUD from "../components/Products/ProductsCRUD";
 
-const HomeView = () => {
+const ProductsView = () => {
   return (
     <>
       <Header title="AlgaStock" />
@@ -15,4 +15,4 @@ const HomeView = () => {
   );
 };
 
-export default HomeView;
+export default ProductsView;

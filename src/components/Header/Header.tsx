@@ -1,22 +1,24 @@
 import React from "react";
 import "./Header.scss";
 import { RootState } from "../../redux";
-import { connect, useDispatch } from "react-redux";
-import { User } from "../../services/Authentication.service";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/Authentication/Authentication.actions";
 import Swal from "sweetalert2";
 
 declare interface HeaderProps {
   title: string;
-  profile?: User;
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const isLoggedIn = !!props.profile?._id;
+  const profile = useSelector((state: RootState) => ({
+    profile: state.authentication.profile,
+  }));
+
+  const isLoggedIn = !!profile;
 
   const askToLogout = () => {
     Swal.fire({
@@ -25,11 +27,18 @@ const Header: React.FC<HeaderProps> = (props) => {
       showCancelButton: true,
       confirmButtonColor: "#09f",
       cancelButtonColor: "#d33",
-    }).then(({ value }) => value && dispatch(logout()));
+    }).then(({ value }) => {
+      value && dispatch(logout());
+      navigate("/login");
+    });
   };
 
   const handleLoginLogout = () => {
     isLoggedIn ? askToLogout() : navigate("/login");
+  };
+
+  const handleProfile = () => {
+    navigate("/profile");
   };
 
   return (
@@ -40,6 +49,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           <Link to={"/products"}>Products</Link>
         </ul>
       </div>
+      {profile && <button onClick={handleProfile}>Profile</button>}
       <button onClick={handleLoginLogout}>
         {isLoggedIn ? "Logout" : "Login"}
       </button>
@@ -47,9 +57,4 @@ const Header: React.FC<HeaderProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  firstProduct: state.products[0],
-  profile: state.authentication.profile,
-});
-
-export default connect(mapStateToProps)(Header);
+export default Header;

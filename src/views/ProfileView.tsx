@@ -1,16 +1,20 @@
-// @ts-nocheck
 import React from "react";
-import { connect } from "react-redux";
 import ProfileCard, { User } from "../components/Authentication/ProfileCard";
-import Header from "../components/Header";
 import Container from "../shared/Container";
 import withPermission from "../utils/HOC/withPermission";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux";
+import Header from "../components/Header";
 
 declare interface ProfileViewProps {
   user: User;
 }
 
 const ProfileView: React.FC<ProfileViewProps> = (props) => {
+  const auth = useSelector((state: RootState) => ({
+    profile: state.authentication.profile,
+  }));
+
   return (
     <>
       <Header title="AlgaStock" />
@@ -21,20 +25,16 @@ const ProfileView: React.FC<ProfileViewProps> = (props) => {
             justifyContent: "center",
           }}
         >
-          <ProfileCard user={props.user} />
+          <ProfileCard
+            user={{
+              email: auth.profile?.email || "",
+              name: auth.profile?.user || "",
+            }}
+          />
         </div>
       </Container>
     </>
   );
 };
 
-const mapStateToProps = () => ({
-  user: {
-    name: "Anderson Souza",
-    email: "andersonpds14@gmail.com",
-  },
-});
-
-export default connect(mapStateToProps)(
-  withPermission(["admin", "customer"], "/")(ProfileView)
-);
+export default withPermission(["admin", "customer"], "/")(ProfileView);

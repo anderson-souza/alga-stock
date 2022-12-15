@@ -4,7 +4,7 @@ import { Action } from "..";
 declare interface AuthenticationState {
   profile?: User;
 }
-export default function (
+export default function AuthenticationReducer(
   state: AuthenticationState = {},
   action: Action
 ): AuthenticationState {

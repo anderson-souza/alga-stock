@@ -1,9 +1,9 @@
 import React from "react";
-import "./Header.css";
+import "./Header.scss";
 import { RootState } from "../../redux";
 import { connect, useDispatch } from "react-redux";
 import { User } from "../../services/Authentication.service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/Authentication/Authentication.actions";
 import Swal from "sweetalert2";
 
@@ -34,12 +34,15 @@ const Header: React.FC<HeaderProps> = (props) => {
 
   return (
     <header className="AppHeader">
-      <h1>{props.title}</h1>
-      <div>
-        <span onClick={handleLoginLogout}>
-          {isLoggedIn ? "Logout" : "Login"}
-        </span>
+      <div className="navbar">
+        <h1>{props.title}</h1>
+        <ul className="nav-links">
+          <Link to={"/products"}>Products</Link>
+        </ul>
       </div>
+      <button onClick={handleLoginLogout}>
+        {isLoggedIn ? "Logout" : "Login"}
+      </button>
     </header>
   );
 };

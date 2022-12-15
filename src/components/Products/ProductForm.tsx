@@ -5,6 +5,8 @@ import Input from "../../shared/Input";
 import Button from "../../shared/Button";
 import { Product } from "../../shared/Table/Table.mockdata";
 import withPermission from "../../utils/HOC/withPermission";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 declare interface InitialFormState {
   _id?: string;
@@ -41,6 +43,8 @@ const ProductForm: React.FC<ProductFormProps> = (props) => {
 
   const [form, setForm] = useState(initialFormState);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setForm(initialFormState);
   }, [props.form]);
@@ -63,6 +67,12 @@ const ProductForm: React.FC<ProductFormProps> = (props) => {
     };
 
     props.onUpdate && props.onUpdate(productDto);
+    Swal.fire(
+      "Uhul!",
+      `Product ${productDto.name} successfully updated!`,
+      "success"
+    );
+    navigate("/products");
   };
 
   const createProduct = (product: InitialFormState) => {
@@ -73,6 +83,11 @@ const ProductForm: React.FC<ProductFormProps> = (props) => {
     };
 
     props.onSubmit && props.onSubmit(productDto);
+    Swal.fire(
+      "Uhul!",
+      `Product ${productDto.name} successfully created`,
+      "success"
+    );
   };
 
   const handleFormSubmit = () => {

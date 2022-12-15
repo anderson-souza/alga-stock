@@ -4,7 +4,7 @@ import Table, { TableHeader } from "../../shared/Table";
 import { Product } from "../../shared/Table/Table.mockdata";
 import ProductForm, { ProductCreator } from "./ProductForm";
 import Swal from "sweetalert2";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import * as ProductsAction from "../../redux/Products/Products.actions";
 import { RootState, ThunkDispatch } from "../../redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -61,6 +61,7 @@ const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
     dispatch(ProductsAction.deleteProduct(id))
       .then(() => {
         Swal.fire("Uhul!", "Product successfully deleted", "success");
+        navigate("/products");
       })
       .catch(showErrorAlert);
   };
@@ -85,21 +86,31 @@ const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
     );
   };
 
+  const handleProductEdit = (product: Product) => {
+    navigate({
+      pathname: `/products/${product._id}`,
+      search: location.search,
+    });
+  };
+
+  const auth = useSelector((state: RootState) => ({
+    profile: state.authentication.profile,
+  }));
+
+  const canEdit = auth.profile;
+
+  const canDelete = auth.profile;
+
   return (
     <>
       <Table
         headers={headers}
         data={props.products}
         enableActions
-        onDelete={handleProductDelete}
+        onDelete={canDelete ? handleProductDelete : null}
         onDetail={handleProductDetail}
-        onEdit={(product) => {
-          navigate({
-            pathname: `/products/${product._id}`,
-            search: location.search,
-          });
-        }}
-        itemsPerPage={3}
+        onEdit={canEdit ? handleProductEdit : null}
+        itemsPerPage={5}
       />
 
       <ProductForm

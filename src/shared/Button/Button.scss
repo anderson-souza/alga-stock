@@ -5,4 +5,10 @@ button.AppButton {
   box-shadow: 0 3px 6px;
   border: none;
   padding: 7px 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(#09f, 0.7);
+  }
+
 }
